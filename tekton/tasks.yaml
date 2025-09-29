@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: fetch-source
+spec:
+  workspaces:
+    name: source
+  params:
+    - name: url
+      type: string
+    - name: revision
+      type: string
+      default: "main"
+  steps:
+    - name: fetch
+      image: bitnami/git:latest
+      script: |
+        git clone $(params.url) /workspaces/source
+        cd /workspaces/source
+        git checkout $(params.revision)
+        
